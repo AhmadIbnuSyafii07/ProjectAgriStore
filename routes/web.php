@@ -1,11 +1,9 @@
 <?php
 
-<<<<<<< HEAD
-=======
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\TokoController;
->>>>>>> 6923da0b5b0ee7e00abd86398c00bd7738467be6
+
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\TokoController;
+
 use App\Http\Controllers\Admin\DashboardController;
 
 Route::get('/', fn () => redirect()->route('admin.dashboard'));

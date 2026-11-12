@@ -1,5 +1,5 @@
 @props(['name', 'size' => 18])
-<<<<<<< HEAD
+
 
 {{-- Pemakaian: <x-icon name="home" /> . Semua ikon SVG inline, tanpa library. --}}
 <svg xmlns="http://www.w3.org/2000/svg" width="{{ $size }}" height="{{ $size }}" viewBox="0 0 24 24"
@@ -55,7 +55,7 @@
             <path d="M4 7h16M4 12h16M4 17h16"/>
             @break
     @endswitch
-=======
+
 <svg width="{{ $size }}" height="{{ $size }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" {{ $attributes }}>
 @switch($name)
     @case('grid')
@@ -113,5 +113,4 @@
         <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
         @break
 @endswitch
->>>>>>> 6923da0b5b0ee7e00abd86398c00bd7738467be6
 </svg>
