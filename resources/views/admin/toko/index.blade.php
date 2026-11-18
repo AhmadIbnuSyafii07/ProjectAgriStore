@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.layouts_admin.admin')
 
 @section('title', 'Kelola Toko')
 @section('breadcrumb', 'Kelola Toko / Verifikasi Vendor')
@@ -32,7 +32,7 @@
                         <small>{{ $label }}</small>
                         <strong>{{ $ringkasan[$key] }}</strong>
                     </div>
-                    <span class="mini-icon"><x-icon :name="$icon" :size="15" /></span>
+                    <span class="mini-icon"><x-admin.icon :name="$icon" :size="15" /></span>
                 </div>
             @endforeach
         </section>
@@ -41,7 +41,7 @@
         <section class="card">
             <div class="table-head">
                 <h2 class="card-title">Daftar Toko Menunggu Verifikasi &amp; Toko Aktif</h2>
-                <a href="{{ route('admin.toko') }}#form-toko" class="btn add"><x-icon name="plus" :size="13" /> Tambah Toko</a>
+                <a href="{{ route('admin.toko') }}#form-toko" class="btn add"><x-admin.icon name="plus" :size="13" /> Tambah Toko</a>
             </div>
 
             <form method="GET" action="{{ route('admin.toko') }}" class="filters">
@@ -83,14 +83,14 @@
                                 <div class="act">
                                     {{-- Detail (modal) --}}
                                     <button type="button" class="btn detail" onclick="document.getElementById('detail-{{ $t->id }}').showModal()">
-                                        <x-icon name="eye" :size="12" /> Detail
+                                        <x-admin.icon name="eye" :size="12" /> Detail
                                     </button>
 
                                     {{-- Setujui: tampil jika belum aktif --}}
                                     @if ($t->status !== 'aktif')
                                         <form method="POST" action="{{ route('admin.toko.setujui', $t) }}">
                                             @csrf @method('PATCH')
-                                            <button class="btn approve"><x-icon name="check" :size="12" /> Setujui</button>
+                                            <button class="btn approve"><x-admin.icon name="check" :size="12" /> Setujui</button>
                                         </form>
                                     @endif
 
@@ -98,18 +98,18 @@
                                     @if ($t->status === 'menunggu')
                                         <form method="POST" action="{{ route('admin.toko.tolak', $t) }}">
                                             @csrf @method('PATCH')
-                                            <button class="btn tolak"><x-icon name="x" :size="12" /> Tolak</button>
+                                            <button class="btn tolak"><x-admin.icon name="x" :size="12" /> Tolak</button>
                                         </form>
                                     @endif
 
                                     <a href="{{ route('admin.toko', ['edit' => $t->id] + request()->only('q', 'status', 'page')) }}#form-toko" class="btn edit">
-                                        <x-icon name="edit" :size="12" /> Edit
+                                        <x-admin.icon name="edit" :size="12" /> Edit
                                     </a>
 
                                     <form method="POST" action="{{ route('admin.toko.destroy', $t) }}"
                                           onsubmit="return confirm(@js('Hapus toko '.$t->nama_toko.'? Data tidak bisa dikembalikan.'))">
                                         @csrf @method('DELETE')
-                                        <button class="btn delete"><x-icon name="trash" :size="12" /> Hapus</button>
+                                        <button class="btn delete"><x-admin.icon name="trash" :size="12" /> Hapus</button>
                                     </form>
                                 </div>
 

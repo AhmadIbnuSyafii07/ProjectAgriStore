@@ -42,17 +42,17 @@
         <nav class="menu">
             @foreach ($menu as [$route, $label, $icon])
                 <a href="{{ route($route) }}" class="{{ request()->routeIs($route) ? 'active' : '' }}">
-                    <x-icon :name="$icon" :size="17" /> {{ $label }}
-                    @if ($route === 'admin.toko' && ($menunggu = \App\Models\Toko::where('status', 'menunggu')->count()) > 0)
-                        <span class="menu-badge">{{ $menunggu }}</span>
-                    @endif
+                    <x-admin.icon :name="$icon" :size="17" /> {{ $label }}
+                        @if ($route === 'admin.toko' && ($menunggu = \App\Models\Toko::where('status', 'menunggu')->count()) > 0)
+                            <span class="menu-badge">{{ $menunggu }}</span>
+                        @endif
                 </a>
             @endforeach
         </nav>
 
         <form method="POST" action="#" class="logout">
             @csrf
-            <button type="button"><x-icon name="logout" :size="17" /> Log Out</button>
+            <button type="button"><x-admin.icon name="logout" :size="17" /> Log Out</button>
         </form>
     </aside>
 
@@ -63,9 +63,9 @@
             <div class="topbar-right">
                 <div class="search">
                     <input type="text" placeholder="Search...">
-                    <button type="button" aria-label="Cari"><x-icon name="search" :size="16" /></button>
+                    <button type="button" aria-label="Cari"><x-admin.icon name="search" :size="16" /></button>
                 </div>
-                <span class="bell"><x-icon name="bell" :size="19" /><i>1</i></span>
+                <span class="bell"><x-admin.icon name="bell" :size="19" /><i>1</i></span>
                 <span class="profile"><i>A</i> Admin</span>
             </div>
         </header>

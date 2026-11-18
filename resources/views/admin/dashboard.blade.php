@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.layouts_admin.admin')
 
 @section('title', 'Dashboard')
 
@@ -9,7 +9,7 @@
             <div class="stat {{ $s['color'] }}">
                 <div class="stat-head">
                     <span class="stat-title">{{ $s['title'] }}</span>
-                    <span class="stat-icon"><x-icon :name="$s['icon']" :size="18" /></span>
+                    <span class="stat-icon"><x-admin.icon :name="$s['icon']" :size="18" /></span>
                 </div>
                 <strong class="stat-value">{{ $s['value'] }}</strong>
                 <div class="stat-foot">
@@ -44,8 +44,8 @@
                         <td>{{ $toko['tanggal'] }}</td>
                         <td><span class="pill pending">Pending</span></td>
                         <td class="center">
-                            <button class="btn approve"><x-icon name="check" :size="12" /> Setujui</button>
-                            <button class="btn reject"><x-icon name="x" :size="12" /> Tolak</button>
+                            <button class="btn approve"><x-admin.icon name="check" :size="12" /> Setujui</button>
+                            <button class="btn reject"><x-admin.icon name="x" :size="12" /> Tolak</button>
                         </td>
                     </tr>
                 @endforeach
