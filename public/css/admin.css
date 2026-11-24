@@ -187,3 +187,50 @@ section.card { margin-bottom: 20px; }
     .toko-side .form-card { position: static; }
     .mini-stats { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* =========================================================
+   KELOLA PRODUK
+   ========================================================= */
+.p-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px; }
+.p-stat { position: relative; border-radius: 14px; padding: 16px 18px 14px; color: #fff; min-height: 104px; box-shadow: var(--shadow); }
+.p-stat-top { display: flex; justify-content: space-between; align-items: center; font-size: 12.5px; }
+.p-icon { width: 28px; height: 28px; border-radius: 8px; background: rgba(255,255,255,.25); display: grid; place-items: center; }
+.p-stat strong { display: block; font-size: 30px; font-weight: 600; margin-top: 6px; letter-spacing: -.5px; }
+.p-spark { position: absolute; right: 16px; bottom: 14px; width: 90px; height: 28px; }
+.ps-total   { background: linear-gradient(135deg, #7d90b2, #96a8c6); }
+.ps-aktif   { background: linear-gradient(135deg, #7ccaa0, #9ddfba); }
+.ps-menipis { background: linear-gradient(135deg, #e2ae58, #edc67c); }
+.ps-draft   { background: linear-gradient(135deg, #979cae, #b2b6c5); }
+
+.p-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 14px; margin-bottom: 16px; flex-wrap: wrap; }
+.p-title { font-size: 18px; font-weight: 600; }
+.p-tools { display: flex; align-items: center; gap: 10px; }
+.p-tools-form { display: flex; gap: 10px; }
+.p-search { position: relative; }
+.p-search input { width: 190px; padding: 8px 32px 8px 12px; border: 1px solid var(--border); border-radius: 8px; font: inherit; font-size: 12.5px; outline: none; }
+.p-search input:focus, .p-select:focus { border-color: var(--blue); }
+.p-search svg { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: var(--muted); }
+.p-select { padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; font: inherit; font-size: 12.5px; background: #fff; outline: none; }
+.btn.add.lg { padding: 9px 16px; font-size: 12.5px; border-radius: 8px; }
+
+.tbl-produk th { font-size: 12px; font-weight: 600; color: #3a4357; padding: 11px 10px; }
+.tbl-produk td { font-size: 13px; vertical-align: middle; }
+.tbl-produk strong { display: block; font-weight: 600; }
+.tbl-produk .sub { display: block; font-size: 11px; color: var(--muted); margin-top: 2px; }
+.thumb { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; background: #eef1f6; display: block; }
+.stok { display: inline-block; padding: 2px 10px; border-radius: 6px; font-size: 11.5px; font-weight: 500; }
+.stok.ok  { background: #dcf5e6; color: #167a4a; }
+.stok.low { background: #ffe9c7; color: #a55a00; }
+.stok.out { background: #fde2e2; color: #b42318; }
+.pill.s-draft { background: #e5e7ee; color: #4b5468; border: 1px solid #cdd2de; }
+.aksi-link { background: none; border: 0; cursor: pointer; font: inherit; font-size: 12px; color: #1f2a44; display: inline-flex; align-items: center; gap: 5px; margin: 0 5px; }
+.aksi-link:hover { color: var(--blue); }
+.p-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; font-size: 12px; color: var(--muted); }
+
+@media (max-width: 1100px) {
+    .p-stats { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 700px) {
+    .p-stats { grid-template-columns: 1fr; }
+    .p-tools, .p-tools-form { flex-wrap: wrap; }
+}

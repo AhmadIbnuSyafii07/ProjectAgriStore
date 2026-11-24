@@ -55,5 +55,8 @@
     @case('clock')
         <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
         @break
+    @case('trend')
+        <path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/>
+        @break
 @endswitch
 </svg>

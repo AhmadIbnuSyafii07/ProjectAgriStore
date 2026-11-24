@@ -3,7 +3,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\TokoController;
-
+use App\Http\Controllers\Admin\ProdukController;
 use App\Http\Controllers\Admin\DashboardController;
 
 Route::get('/', fn () => redirect()->route('admin.dashboard'));
@@ -19,11 +19,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::patch('/toko/{toko}/tolak', [TokoController::class, 'tolak'])->name('toko.tolak');
     Route::delete('/toko/{toko}', [TokoController::class, 'destroy'])->name('toko.destroy');
 
+    Route::get('/produk', [ProdukController::class, 'index'])->name('produk');
+
     // Placeholder menu lain (halaman dibuat nanti)
-    foreach (['produk', 'pengguna', 'transaksi', 'konfigurasi', 'laporan'] as $page) {
-        Route::get("/$page", fn () => redirect()->route('admin.dashboard'))->name($page);
-    }
-});
+    foreach (['pengguna', 'transaksi', 'konfigurasi', 'laporan'] as $page) {
+            Route::get("/$page", fn () => redirect()->route('admin.dashboard'))->name($page);
+        }
+    });
 
 // ===== Punya Della: dashboard penjual =====
 Route::get('/seller/dashboard', function () {
