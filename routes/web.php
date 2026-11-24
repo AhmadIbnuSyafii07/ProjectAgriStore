@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\TokoController;
 use App\Http\Controllers\Admin\ProdukController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PenggunaController;
 
 Route::get('/', fn () => redirect()->route('admin.dashboard'));
 
@@ -21,8 +22,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::get('/produk', [ProdukController::class, 'index'])->name('produk');
 
+    Route::get('/pengguna', [PenggunaController::class, 'index'])->name('pengguna');
+
     // Placeholder menu lain (halaman dibuat nanti)
-    foreach (['pengguna', 'transaksi', 'konfigurasi', 'laporan'] as $page) {
+    foreach (['transaksi', 'konfigurasi', 'laporan'] as $page) {
             Route::get("/$page", fn () => redirect()->route('admin.dashboard'))->name($page);
         }
     });

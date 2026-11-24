@@ -58,5 +58,11 @@
     @case('trend')
         <path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/>
         @break
+    @case('lock')
+        <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        @break
+    @case('unlock')
+        <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/>
+        @break
 @endswitch
 </svg>
