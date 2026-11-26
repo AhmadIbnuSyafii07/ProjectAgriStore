@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin\TokoController;
 use App\Http\Controllers\Admin\ProdukController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PenggunaController;
+use App\Http\Controllers\Admin\KonfigurasiController;
+use App\Http\Controllers\Admin\LaporanController;
 
 Route::get('/', fn () => redirect()->route('admin.dashboard'));
 
@@ -24,8 +26,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::get('/pengguna', [PenggunaController::class, 'index'])->name('pengguna');
 
+    Route::get('/konfigurasi', [KonfigurasiController::class, 'index'])->name('konfigurasi');
+    Route::put('/konfigurasi', [KonfigurasiController::class, 'update'])->name('konfigurasi.update');
+
+    Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan');
+    
     // Placeholder menu lain (halaman dibuat nanti)
-    foreach (['transaksi', 'konfigurasi', 'laporan'] as $page) {
+    foreach (['transaksi', 'laporan'] as $page) {
             Route::get("/$page", fn () => redirect()->route('admin.dashboard'))->name($page);
         }
     });
