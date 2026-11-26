@@ -3,54 +3,59 @@
 namespace App\Http\Controllers\Seller;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
+use App\Models\Product;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        // TODO: ganti data dummy ini dengan query Eloquent (Order, Product, dll).
+        $vid  = auth()->id();
+        $base = fn () => Order::where('vendor_id', $vid);
+
         $stats = [
-            'new_orders'      => 12,
-            'active_products' => 55,
-            'low_stock'       => 3,
-            'month_revenue'   => 15000000,
+            'new_orders'      => $base()->whereIn('order_status', ['pending_payment', 'processing'])->count(),
+            'active_products' => Product::where('vendor_id', $vid)->where('is_active', true)->count(),
+            'low_stock'       => Product::where('vendor_id', $vid)->where('is_active', true)
+                                    ->where('stock', '<=', Product::LOW_STOCK)->count(),
+            'month_revenue'   => $base()->where('payment_status', 'paid')
+                                    ->whereYear('created_at', now()->year)
+                                    ->whereMonth('created_at', now()->month)
+                                    ->sum('grand_total'),
         ];
 
-        // Penjualan 7 hari (Sen-Min)
-        $weekly = [
-            'Sen' => 8, 'Sel' => 14, 'Rab' => 10, 'Kam' => 18,
-            'Jum' => 12, 'Sab' => 15, 'Min' => 7,
+        // Penjualan 7 hari terakhir (jumlah pesanan per hari)
+        $dayNames = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
+        $start    = now()->subDays(6)->startOfDay();
+        $recent   = $base()->where('created_at', '>=', $start)->get(['id', 'created_at']);
+        $weekly   = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $day = now()->subDays($i);
+            $weekly[$dayNames[$day->dayOfWeek]] = $recent->filter(fn ($o) => $o->created_at->isSameDay($day))->count();
+        }
+
+        // Status pesanan (donut)
+        $counts = $base()->selectRaw('order_status, count(*) as total')->groupBy('order_status')->pluck('total', 'order_status');
+        $status = [
+            'processed' => (int) ($counts['processing'] ?? 0),
+            'shipped'   => (int) ($counts['shipped'] ?? 0),
+            'pending'   => (int) ($counts['pending_payment'] ?? 0),
         ];
 
-        // Status pesanan (persen) -> total 100
-        $statusBreakdown = [
-            'processed' => 45,
-            'shipped'   => 30,
-            'pending'   => 25,
-        ];
+        // Pendapatan per bulan tahun ini (juta rupiah), hanya pembayaran Valid
+        $paid = $base()->where('payment_status', 'paid')->whereYear('created_at', now()->year)->get(['grand_total', 'created_at']);
+        $monthNames = [1 => 'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+        $monthly = [];
+        foreach ($monthNames as $n => $label) {
+            $sum = $paid->filter(fn ($o) => $o->created_at->month === $n)->sum('grand_total');
+            $monthly[$label] = round($sum / 1000000, 1);
+        }
 
-        $orders = [
-            ['code' => '#SS-001', 'buyer' => 'Budi Santoso', 'product' => 'Pupuk NPK 13-6-27', 'total' => 'Rp 300.000', 'status' => 'processed'],
-            ['code' => '#SS-002', 'buyer' => 'Siti Aminah',  'product' => 'Pupuk NPK 13-6-27', 'total' => 'Rp 250.000', 'status' => 'processed'],
-            ['code' => '#SS-003', 'buyer' => 'Andi Pratama', 'product' => 'Egrek Sawit',       'total' => 'Rp 450.000', 'status' => 'shipped'],
-            ['code' => '#SS-004', 'buyer' => 'Rina Marlina', 'product' => 'Pupuk NPK 13-6-37', 'total' => 'Rp 500.000', 'status' => 'pending'],
-            ['code' => '#SS-005', 'buyer' => 'Joko Widodo',  'product' => 'Dodos Sawit',       'total' => 'Rp 180.000', 'status' => 'pending'],
-        ];
+        $orders = $base()->with(['buyer', 'items.product'])->latest()->take(5)->get();
 
-        $lowStockItems = [
-            ['name' => 'Pupuk Urea 50kg',  'stock' => 4,  'max' => 40],
-            ['name' => 'Egrek Sawit',      'stock' => 6,  'max' => 30],
-            ['name' => 'Sarung Tangan',    'stock' => 9,  'max' => 60],
-        ];
+        $lowStockItems = Product::where('vendor_id', $vid)->where('is_active', true)
+            ->where('stock', '<=', Product::LOW_STOCK)->orderBy('stock')->take(4)->get();
 
-        // Penjualan bulanan (Jan-Des), satuan juta rupiah
-        $monthly = [
-            'Jan' => 9,  'Feb' => 11, 'Mar' => 14, 'Apr' => 12, 'Mei' => 15, 'Jun' => 13,
-            'Jul' => 16, 'Agu' => 14, 'Sep' => 18, 'Okt' => 17, 'Nov' => 15, 'Des' => 20,
-        ];
-
-        return view('seller.dashboard', compact(
-            'stats', 'weekly', 'statusBreakdown', 'orders', 'lowStockItems', 'monthly'
-        ));
+        return view('seller.dashboard', compact('stats', 'weekly', 'status', 'monthly', 'orders', 'lowStockItems'));
     }
 }

@@ -37,7 +37,4 @@ Route::prefix('admin')->name('admin.')->group(function () {
         }
     });
 
-// ===== Punya Della: dashboard penjual =====
-Route::get('/seller/dashboard', function () {
-    return view('seller.dashboard');
-});
+require __DIR__.'/seller.php';
