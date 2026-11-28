@@ -7,18 +7,21 @@ use App\Http\Controllers\Seller\ProfileController;
 use App\Http\Controllers\Seller\ReportController;
 use App\Http\Controllers\Seller\StockController;
 use App\Models\User;
+use Database\Seeders\SellerDemoSeeder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
 /*
- * Semua route modul Penjual. Dimuat dari routes/web.php dengan:
- *     require __DIR__.'/seller.php';
+- Semua route modul Penjual. Dimuat dari routes/web.php dengan:
+-     require __DIR__.'/seller.php';
  */
       
 /*
- * Middleware khusus penjual (ditaruh di sini sementara).
- * Nanti bisa dipindah ke app/Http/Middleware/.
+- Middleware khusus penjual (ditaruh di sini sementara).
+- Nanti bisa dipindah ke app/Http/Middleware/.
  */
 if (! class_exists('EnsureUserIsVendor')) {
     class EnsureUserIsVendor
@@ -39,15 +42,32 @@ if (! class_exists('EnsureUserIsVendor')) {
 Route::redirect('/seller', '/seller/dashboard');
 
 /*
- * ===== LOGIN SEMENTARA (HANYA UNTUK LOCAL) =====
- * Aktif hanya jika APP_ENV=local DAN route 'login' belum ada.
- * Buka /login -> otomatis masuk sebagai penjual contoh dari SellerDemoSeeder.
- * HAPUS blok ini setelah login asli tersedia.
+- ===== LOGIN SEMENTARA (HANYA UNTUK LOCAL) =====
+- Aktif hanya jika APP_ENV=local DAN route 'login' belum ada.
+- Buka /login -> otomatis menjalankan SellerDemoSeeder jika akun belum ada,
+  lalu masuk sebagai penjual contoh.
+- HAPUS blok ini setelah login asli tersedia.
  */
 if (app()->environment('local') && ! Route::has('login')) {
     Route::get('/login', function () {
         $vendor = User::where('email', 'vendor@sawitsupply.test')->first();
-        abort_unless($vendor, 404, 'Jalankan dulu: php artisan db:seed --class=SellerDemoSeeder');
+
+        if (! $vendor && class_exists(SellerDemoSeeder::class)) {
+            Artisan::call('db:seed', ['--class' => SellerDemoSeeder::class]);
+            $vendor = User::where('email', 'vendor@sawitsupply.test')->first();
+        }
+
+        if (! $vendor) {
+            $vendor = User::firstOrCreate(
+                ['email' => 'vendor@sawitsupply.test'],
+                [
+                    'name' => 'Penjual Demo',
+                    'password' => Hash::make('password'),
+                    'role' => 'vendor',
+                ]
+            );
+        }
+
         Auth::login($vendor);
 
         return redirect()->route('seller.dashboard');
